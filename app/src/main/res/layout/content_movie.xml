@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MovieActivity"
+    tools:showIn="@layout/app_bar_movie">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_popular"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_movie_popular"/>
+
+    <ProgressBar
+        android:id="@+id/pg_pop_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rv_popular"
+        app:layout_constraintStart_toStartOf="@+id/rv_popular"
+        app:layout_constraintTop_toTopOf="@+id/rv_popular" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
