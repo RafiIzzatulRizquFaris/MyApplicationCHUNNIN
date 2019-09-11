@@ -14,13 +14,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder> {
 
-    ArrayList<Movie> movieArrayList;
+    List<Movie> movieArrayList;
     Context context;
 
-    public PopularAdapter(ArrayList<Movie> movieArrayList, Context context) {
+    public PopularAdapter(List<Movie> movieArrayList, Context context) {
         this.movieArrayList = movieArrayList;
         this.context = context;
     }

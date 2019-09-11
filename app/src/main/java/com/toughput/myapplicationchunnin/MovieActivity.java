@@ -36,14 +36,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
     PopularAdapter popularAdapter;
-    ArrayList<Movie> movieArrayList;
+    List<Movie> movieArrayList;
     ProgressBar pgBar;
+    private String url = "https://api.themoviedb.org/3/discover/movie?api_key=ac80477002d21dc4400901f64c0506a7";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +70,15 @@ public class MovieActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        recyclerView = findViewById(R.id.rv_popular);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
         pgBar = findViewById(R.id.pg_pop_movie);
         pgBar.setVisibility(View.VISIBLE);
-
+        recyclerView = findViewById(R.id.rv_popular);
         movieArrayList = new ArrayList<>();
-        getMovie();
-        popularAdapter = new PopularAdapter(movieArrayList, this);
+        popularAdapter = new PopularAdapter(movieArrayList, getApplicationContext());
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(popularAdapter);
-        popularAdapter.notifyDataSetChanged();
 //        ArrayList<Movie> list = new ArrayList<>();
 
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
@@ -88,10 +89,14 @@ public class MovieActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+        if (savedInstanceState == null){
+            getMovie(url);
+        }
+
     }
 
-    private void getMovie() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "https://api.themoviedb.org/3/discover/movie?api_key=ac80477002d21dc4400901f64c0506a7&language=en-US",null, new Response.Listener<JSONObject>() {
+    private void getMovie(String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -106,6 +111,7 @@ public class MovieActivity extends AppCompatActivity
                         movie.setPopularity(String.valueOf(jsonObject.getDouble("popularity")));
                         movieArrayList.add(movie);
                     }
+                    popularAdapter.notifyDataSetChanged();
                     pgBar.setVisibility(View.INVISIBLE);
                     Log.d("RESPONSE : ", "Success");
                 } catch (JSONException e) {
