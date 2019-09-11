@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -49,34 +50,30 @@ public class AdventureFragment extends Fragment {
 
     RecyclerView recyclerView;
     PopularAdapter popularAdapter;
-    ArrayList<Movie> movieArrayList;
+    List<Movie> movieArrayList;
     ProgressBar pgBar;
+    String url = "https://api.themoviedb.org/3/discover/movie?api_key=ac80477002d21dc4400901f64c0506a7";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_adventure, container, false);
-        recyclerView = v.findViewById(R.id.rv_adventure);
+        recyclerView = v.findViewById(R.id.rv_genres);
+        movieArrayList = new ArrayList<>();
+        popularAdapter = new PopularAdapter(movieArrayList, getContext());
+
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        pgBar = v.findViewById(R.id.pg_adventure_movie);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        recyclerView.setAdapter(popularAdapter);
+
+        pgBar = v.findViewById(R.id.pg_genre_movie);
         pgBar.setVisibility(View.VISIBLE);
 
-        movieArrayList = new ArrayList<>();
-        getMovie();
-        popularAdapter = new PopularAdapter(movieArrayList, getContext());
-        recyclerView.setAdapter(popularAdapter);
-        popularAdapter.notifyDataSetChanged();
-//        ArrayList<Movie> list = new ArrayList<>();
 
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(DetailActivity.EXTRA_MOVIE, movieArrayList.get(position));
-                startActivity(intent);
-            }
-        });
+        if (savedInstanceState==null){
+            getMovie(url);
+        }
         return v;
     }
 

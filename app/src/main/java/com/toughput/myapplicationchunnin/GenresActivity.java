@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -54,6 +55,14 @@ public class GenresActivity extends AppCompatActivity {
         if (savedInstanceState==null){
             getPopMovie(url);
         }
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Intent intent = new Intent(GenresActivity.this, DetailActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_MOVIE, movieArrayList.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
     private void getPopMovie(String url) {
